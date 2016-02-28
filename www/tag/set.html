@@ -10,7 +10,7 @@
             <p>{definition}</p>
         </li>
     </ul>
-    <button class="button button-block button-calm" href="#set" onclick={viewAll}>
+    <button class="button button-block button-stable" href="#set" onclick={viewAll}>
         Show {text} Cards
     </button>
     <div if={pallash}>
@@ -20,7 +20,7 @@
                     Type of Set
                 </div>
                 <select name="type">
-                    <option selected value="science">Science</option>
+                    <option value="science">Science</option>
                     <option value="chemistry">Chemistry</option>
                     <option value="biology">Biology</option>
                     <option value="physics">Physics</option>
@@ -33,7 +33,7 @@
                     <option value="algebra">Algebra</option>
                     <option value="calculus">Calculus</option>
                     <option value="literature">Literature</option>
-                    <option value="general">General</option>
+                    <option selected value="general">General</option>
                     <option value="hackathon">Hackathon</option>
                 </select>
             </label>
