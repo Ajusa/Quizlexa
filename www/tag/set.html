@@ -1,5 +1,4 @@
 <set>
-
     <h3>Title: {data.title}</h3>
     <p>Length: {data.term_count}</p>
     <p>Author: {data.created_by}</p>
@@ -11,6 +10,9 @@
             <p>{definition}</p>
         </li>
     </ul>
+    <button class="button button-block button-calm" href="#set" onclick={viewAll}>
+        Show {text} Cards
+    </button>
     <div if={pallash}>
         <div class="list">
             <label class="item item-input item-select">
@@ -52,6 +54,7 @@
     self.loop;
     self.pallash;
     self.category;
+    self.text = "All";
     RiotControl.on('returnSet', function(set) {
         self.data = set;
         //console.log(self.data)
@@ -79,6 +82,18 @@
     delete(e) {
         RiotControl.trigger('deleteSet', self.category, self.data.id);
         riot.route('sets')
+    }
+    viewAll(e) {
+        if (self.text == "All") {
+            self.text = "Less"
+            self.loop = JSON.parse(JSON.stringify(self.data.terms))
+            console.log(self.loop)
+        } else if (self.text == "Less") {
+            self.text = "All"
+            self.loop = JSON.parse(JSON.stringify(self.data.terms))
+            self.loop.splice(10, self.loop.length)
+        }
+        self.update();
     }
     </script>
 </set>
