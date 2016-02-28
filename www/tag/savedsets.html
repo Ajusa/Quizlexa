@@ -1,0 +1,35 @@
+<saved>
+    <h2 class="dark">Saved Sets:</h2>
+    <div class="card " each={data.view} onclick={view}>
+        <div class="item item-divider positive">
+            {title}
+        </div>
+        <div class="item item-text-wrap">
+            <p>Description: {description || "None"}</p>
+            <p>Length: {term_count}</p>
+            <p>Author: {created_by}</p>
+        </div>
+        <div class="item item-divider calm">
+            {type}
+        </div>
+    </div>
+    <script>
+    var self = this;
+    self.data;
+    RiotControl.on('new_data', function(set) {
+        self.data = set;
+        console.log(self.data)
+        self.update();
+    });
+    view(e) {
+        riot.route('set/' + e.item.id + '/view/' + e.item.type)
+        self.update();
+    }
+    riot.route(function(a) {
+        RiotControl.trigger('refresh');
+    })
+    self.on('mount', function() {
+        RiotControl.trigger('refresh');
+    })
+    </script>
+</saved>

@@ -1,0 +1,82 @@
+<set>
+
+    <h3>Title: {data.title}</h3>
+    <p>Length: {data.term_count}</p>
+    <p>Author: {data.created_by}</p>
+    <p>Description: {data.description || "None"}</p>
+    <h3>Terms:</h3>
+    <ul class="list">
+        <li each={loop} class="item">
+            {term}
+            <p>{definition}</p>
+        </li>
+    </ul>
+    <div if={pallash}>
+        <div class="list">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Type of Set
+                </div>
+                <select name="type">
+                    <option selected value="science">Science</option>
+                    <option value="chemistry">Chemistry</option>
+                    <option value="biology">Biology</option>
+                    <option value="physics">Physics</option>
+                    <option value="philosophy">Philosophy</option>
+                    <option value="social studies">Social studies</option>
+                    <option value="world history">World history</option>
+                    <option value="US history">US history</option>
+                    <option value="math">Math</option>
+                    <option value="geometry">Geometry</option>
+                    <option value="algebra">Algebra</option>
+                    <option value="calculus">Calculus</option>
+                    <option value="literature">Literature</option>
+                </select>
+            </label>
+        </div>
+        <button class="button button-block button-calm" href="#set" onclick={add}>
+            Add Set to Alexa
+        </button>
+    </div>
+    <div if={!pallash}>
+        <button class="button button-block button-assertive" onclick={delete}>
+            Delete Set
+        </button>
+    </div>
+    <script>
+    var self = this;
+    self.data;
+    self.id;
+    self.loop;
+    self.pallash;
+    self.category;
+    RiotControl.on('returnSet', function(set) {
+        self.data = set;
+        //console.log(self.data)
+        self.loop = JSON.parse(JSON.stringify(set.terms))
+        self.loop.splice(10, self.loop.length)
+        self.update();
+    })
+    riot.route(function(check, id, pallash, category) {
+        if (check == "set") {
+            if (pallash == "edit")
+                self.pallash = true;
+            if (pallash == "view")
+                self.pallash = false;
+            RiotControl.trigger('getSet', id);
+            self.category = category;
+            self.update();
+        }
+
+    })
+    add(e) {
+        self.data.type = self.type.value;
+        RiotControl.trigger('addSet', self.data);
+        riot.route('sets')
+    }
+    delete(e) {
+        RiotControl.trigger('deleteSet', self.category, self.data.id);
+        riot.route('sets')
+    }
+    </script>
+</set>

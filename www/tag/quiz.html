@@ -1,0 +1,35 @@
+<quiz>
+    <h2>Search Sets</h2>
+    <div class="list list-inset">
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="Search" name="searchTerm">
+        </label>
+    </div>
+    <button class="button button-block button-calm" onclick={change}>
+        Search
+    </button>
+    <ul class="list">
+        <li each={results.sets} class="item" onclick={add}>
+            {title}
+            <p>Length: {term_count}</p>
+            <p>Author: {created_by}</p>
+            <p>Description: {description || "None"}</p>
+        </li>
+    </ul>
+    <script>
+    var self = this;
+    self.results;
+    RiotControl.on('returnSearch', function(set) {
+        self.results = set;
+        self.update();
+    })
+    change(e) {
+        RiotControl.trigger('search', this.searchTerm.value);
+        self.update();
+    }
+    add(e) {
+        riot.route('set/' + e.item.id+'/edit/wat')
+    }
+    </script>
+</quiz>
