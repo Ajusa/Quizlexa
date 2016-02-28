@@ -6,7 +6,7 @@ function setStore() {
     database = new Firebase("http://quizlet.firebaseio.com/");
     database.on("value", function(snapshot) {
         RiotControl.trigger('new_data', snapshot.val());
-        console.log('update')
+        //console.log('update')
     }, function(errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
@@ -23,8 +23,10 @@ function setStore() {
         alert("Set Added")
     });
     self.on('deleteSet', function(category, id) {
-        JSONP('http://quizlet.firebaseio.com/' + category + '/.json', function(json) {
+        var exists;
+        JSONP('http://quizlet.firebaseio.com/' + category + '.json', function(json) {
             exists = json;
+            console.log(exists)
             var temp = database.child(category);
             for (var i = exists.length - 1; i >= 0; i--) {
                 if (exists[i].set_id == id) {
@@ -35,7 +37,6 @@ function setStore() {
         });
         JSONP('http://quizlet.firebaseio.com/view.json', function(json) {
             exists = json;
-
             var temp = database.child('view');
             for (var i = exists.length - 1; i >= 0; i--) {
                 if (exists[i].id == id) {
@@ -44,9 +45,8 @@ function setStore() {
                 temp.set(exists)
             }
 
+            alert("Set Removed")
         });
-        alert("Set Removed")
-
     });
     self.on('refresh', function(value) {
 
@@ -56,13 +56,15 @@ function setStore() {
 
 function setSubject(value) {
     var exists;
-    JSONP('http://quizlet.firebaseio.com/' + value.type + '/.json', function(json) {
+    JSONP('http://quizlet.firebaseio.com/' + value.type + '.json', function(json) {
         exists = json;
         var temp = database.child(value.type);
         if (exists == null) {
             temp.set(value.terms)
         } else {
-            exists.push(value.terms)
+            for (var i = value.terms.length - 1; i >= 0; i--) {
+                exists.push(value.terms[i])
+            }
             temp.set(exists)
         }
     });
